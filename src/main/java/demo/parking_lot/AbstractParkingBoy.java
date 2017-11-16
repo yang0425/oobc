@@ -1,22 +1,19 @@
 package demo.parking_lot;
 
+import demo.exception.CarNotFoundException;
 import demo.exception.ParkingLotFullException;
 import demo.model.Car;
 
-import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class AbstractParkingBoy implements ParkingAble {
+public abstract class AbstractParkingBoy {
 
-    private final PickHelper pickHelper;
     ParkingLot[] parkingLots;
 
     AbstractParkingBoy(ParkingLot... parkingLots) {
         this.parkingLots = parkingLots;
-        this.pickHelper = new PickHelper(parkingLots);
     }
 
-    @Override
     public String park(Car car) {
         Optional<ParkingLot> parkingLot = findSuitableParkingLot();
         if (parkingLot.isPresent()) {
@@ -26,19 +23,12 @@ public abstract class AbstractParkingBoy implements ParkingAble {
         }
     }
 
-    @Override
     public Car pick(String ticket) {
-        return pickHelper.pick(ticket);
-    }
-
-    @Override
-    public boolean isNotFull() {
-        return Arrays.stream(parkingLots).anyMatch(ParkingLot::isNotFull);
-    }
-
-    @Override
-    public boolean containsCar(String ticket) {
-        return Arrays.stream(parkingLots).anyMatch(parkingLot -> parkingLot.containsCar(ticket));
+        for (ParkingLot parkingLot : parkingLots) {
+            if (parkingLot.containsCar(ticket))
+                return parkingLot.pick(ticket);
+        }
+        throw new CarNotFoundException();
     }
 
     abstract Optional<ParkingLot> findSuitableParkingLot();

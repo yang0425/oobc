@@ -7,7 +7,7 @@ import demo.model.Car;
 import java.util.ArrayList;
 import java.util.List;
 
-class ParkingLot implements ParkingAble {
+class ParkingLot {
 
     private List<Car> cars = new ArrayList<>();
     private int capacity;
@@ -16,7 +16,6 @@ class ParkingLot implements ParkingAble {
         this.capacity = capacity;
     }
 
-    @Override
     public String park(Car car) {
         if (cars.size() >= capacity) {
             throw new ParkingLotFullException();
@@ -25,7 +24,6 @@ class ParkingLot implements ParkingAble {
         return car.getNumber();
     }
 
-    @Override
     public Car pick(String ticket) {
         for (Car car : cars) {
             if (car.getNumber().equals(ticket)) {
@@ -36,12 +34,10 @@ class ParkingLot implements ParkingAble {
         throw new CarNotFoundException();
     }
 
-    @Override
-    public boolean isNotFull() {
+    public boolean isAvailable() {
         return getAvailableSpaces() > 0;
     }
 
-    @Override
     public boolean containsCar(String ticket) {
         return cars.stream().anyMatch(car -> car.getNumber().equals(ticket));
     }

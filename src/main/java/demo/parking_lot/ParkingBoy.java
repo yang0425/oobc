@@ -11,7 +11,7 @@ class ParkingBoy extends AbstractParkingBoy {
 
     @Override
     Optional<ParkingLot> findSuitableParkingLot() {
-        return Arrays.stream(parkingLots).filter(ParkingLot::isNotFull).findFirst();
+        return Arrays.stream(parkingLots).filter(ParkingLot::isAvailable).findFirst();
     }
 
 }
